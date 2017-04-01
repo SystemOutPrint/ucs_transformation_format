@@ -43,10 +43,11 @@ __BMP__：UCS-4的group0、plane0的码位被称为BMP，等同于UCS-2。<br/>
 </div>
 
 ## 0x03 UTF-16
-Unicode有16的辅助平面，和一个BMP。<br/>
-BMP可以使用一个字节来表示。而辅助平面的unicode要使用两个字节来表示。<br/><br/>
+Unicode有15个辅助平面，和一个BMP，BMP中的0XD800到0XDFFF是保留的，没有分给任何的字符。<br/>
+在UTF16编码中，BMP可以使用两个字节来表示。而辅助平面的unicode则需要使用四个字节来表示，因为保留的大小等于2^20。<br/><br/>
 __具体算法__：<br/>
+	unicode = 辅助平面的unicode代码点
 	n = unicode - 0x10000(0x10000 <= unicode <= 0x10FFFF)<br/>
-所以0x0000 <= n <= 0xFFFFF<br/>
+所以得出0x0000 <= n <= 0xFFFFF<br/>
 n的高10位加上D800就是第一个字节，n的低10位加上DC00就是第二个字节。<br/>
 所以UTF-16表示的范围是16*2^16个字符。<br/>

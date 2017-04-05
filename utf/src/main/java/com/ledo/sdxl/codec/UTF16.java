@@ -1,7 +1,7 @@
 package com.ledo.sdxl.codec;
 
 /**
- *	UTF16的实现
+ * UTF16的实现
  * 
  * @author CaiJiahe
  */

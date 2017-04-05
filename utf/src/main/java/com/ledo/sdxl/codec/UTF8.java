@@ -1,7 +1,7 @@
 package com.ledo.sdxl.codec;
 
 /**
- * UTF8µÄÊµÏÖ
+ * UTF8çš„å®ç°
  * 
  * @author CaiJiahe
  */
@@ -39,7 +39,7 @@ public class UTF8 implements Codec {
 					result += bytes[j];
 					result += 128;
 				}
-				return result;
+			 	return result;
 			}
 		}
 		return -1;

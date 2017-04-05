@@ -1,5 +1,10 @@
-package com.ledo.sdxl.encoder;
+package com.ledo.sdxl.codec;
 
+/**
+ * UTF8µÄÊµÏÖ
+ * 
+ * @author CaiJiahe
+ */
 public class UTF8 implements Codec {
 
 	final static long[] LENGHT_UPLIMIT = {1L << 7, 1L << 11, 1L << 16, 1L << 21, 1L << 26, 1L << 31}; 
@@ -18,7 +23,7 @@ public class UTF8 implements Codec {
 				byte[] bytes = new byte[i];
 				long mask = 0x3F;
 				for (int j = 0; j < i; j++) {
-					bytes[j] += (unicode&mask);
+					bytes[j] += (unicode & mask);
 					unicode >>>= 6;
 				}
 				long result = 1L;
@@ -28,7 +33,7 @@ public class UTF8 implements Codec {
 					i--;
 				}
 				result <<= 7 - bytes.length;
-				result += (byte)(unicode&0xFF);
+				result += (byte)(unicode & 0xFF);
 				for (int j = bytes.length - 1; j >= 0; j--) {
 					result <<= 8;
 					result += bytes[j];
@@ -40,8 +45,8 @@ public class UTF8 implements Codec {
 		return -1;
 	}
 	
-	public long decode(long code) {
-		if (code < 0 || code > 0xFDFFFFFFFFFFL) {
+	public long decode(long utfcode) {
+		if (utfcode < 0 || utfcode > 0xFDFFFFFFFFFFL) {
 			return -1;
 		}
 		
@@ -49,13 +54,13 @@ public class UTF8 implements Codec {
 		int curByte;
 		int shift = 40;
 		do {
-			curByte = (int) ((code&mask) >> shift);
+			curByte = (int) ((utfcode & mask) >> shift);
 			mask >>= 8;
 			shift -= 8;
 		} while(curByte == 0 && mask > 0);
 		
 		if (mask <= 0) {
-			return code;
+			return utfcode;
 		}
 		
 		int totalBytes = shift/8 + 2;
@@ -67,10 +72,10 @@ public class UTF8 implements Codec {
 		long bitMask2 = 1L << shiftBits;
 		
 		for (; shiftBits >= 0; bitMask2 >>= 1, shiftBits--) {
-			if (shiftBits%8 >= 6) {
+			if (shiftBits % 8 >= 6) {
 				continue;
 			}
-			if ((bitMask2&code) != 0) {
+			if ((bitMask2 & utfcode) != 0) {
 				result |= bitMask1;
 			}
 			bitMask1 >>= 1;

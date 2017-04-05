@@ -13,7 +13,7 @@ public interface Codec {
    * @param unicode
    * @return
    */
-   public long encode(long unicode);
+   long encode(long unicode);
 
    /**
     * ´Ó±àÂë½â³Éunicode
@@ -21,6 +21,6 @@ public interface Codec {
     * @param utfcode
     * @return
     */
-   public long decode(long utfcode);
+   long decode(long utfcode);
 
 }

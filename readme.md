@@ -81,9 +81,3 @@ __小端__：低字节存储在高位（0xABCD => CD AB）。<br/>
 	</table>
 </div>
 
-## 0x04 UTF-16扩展编码字符范围
-
-因为Unicode编码在双字节保留了0xD800到0xDFFF，
-
-
-

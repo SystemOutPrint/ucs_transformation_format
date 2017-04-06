@@ -7,33 +7,45 @@ package com.ledo.sdxl.codec;
  */
 public class UTF8 implements Codec {
 
-	final static long[] LENGHT_UPLIMIT = {1L << 7, 1L << 11, 1L << 16, 1L << 21, 1L << 26, 1L << 31}; 
+	public static final long SIX_BIT_MASK = 0x3F;
+	public static final long[] LENGHT_UPLIMIT = {1L << 7, 1L << 11, 1L << 16, 1L << 21, 1L << 26, 1L << 31}; 
 	
 	public long encode(long unicode) {
 		if (unicode < 0) {
 			return -1;
 		}
 		
-		for (int i = 0; i < LENGHT_UPLIMIT.length; i++) {
+		// 单字节可以使用ascii编码
+		if (unicode < LENGHT_UPLIMIT[0]) {
+			return unicode;
+		}
+		
+		/**
+		 * 编码的过程就是先找到unicode的范围，映射字节长度，确定下首字节的高位，字节长度+0。
+		 * 然后对unicode以6bit作为分割单位，切分好，从低位向高位拼接 10 + 6bit，
+		 * 首字节的剩余部分补0。
+		 */
+		for (int i = 1; i < LENGHT_UPLIMIT.length; i++) {
 			if (unicode < LENGHT_UPLIMIT[i]) {
-				if (i == 0) {
-					return unicode;
-				} 
-
+				// 切分6bit
 				byte[] bytes = new byte[i];
-				long mask = 0x3F;
+				long mask = SIX_BIT_MASK;
 				for (int j = 0; j < i; j++) {
 					bytes[j] += (unicode & mask);
 					unicode >>>= 6;
 				}
+				
+				// 构造首字节
 				long result = 1L;
 				while (i > 0) {
 					result <<= 1;
 					result += 1;
 					i--;
 				}
-				result <<= 7 - bytes.length;
+				result <<= 8 - (bytes.length + 1);
 				result += (byte)(unicode & 0xFF);
+				
+				// 构造剩余字节
 				for (int j = bytes.length - 1; j >= 0; j--) {
 					result <<= 8;
 					result += bytes[j];
@@ -50,6 +62,7 @@ public class UTF8 implements Codec {
 			return -1;
 		}
 		
+		// 寻找首字节
 		long result = 0, mask = 0xFF0000000000L;
 		int curByte;
 		int shift = 40;
@@ -59,26 +72,31 @@ public class UTF8 implements Codec {
 			shift -= 8;
 		} while(curByte == 0 && mask > 0);
 		
+		// 如果是单字节直接返回utfcode
 		if (mask <= 0) {
 			return utfcode;
 		}
 		
+		
+		/**
+		 * fromBitPtr是指向utfcode的bit数组指针，toBitPtr是指向unicode的bit数组指针。
+		 * 忽略除首位字节外的其他字节的前缀0x80。
+		 */
 		int totalBytes = shift/8 + 2;
 		
 		long shiftBits = (totalBytes - 1)*6 + (7 - totalBytes);
-		long bitMask1 = 1L << shiftBits;
+		long toBitPtr = 1L << shiftBits;
 		
 		shiftBits += (totalBytes - 1)*2;
-		long bitMask2 = 1L << shiftBits;
+		long fromBitPtr = 1L << shiftBits;
 		
-		for (; shiftBits >= 0; bitMask2 >>= 1, shiftBits--) {
-			if (shiftBits % 8 >= 6) {
-				continue;
+		for (; shiftBits >= 0; fromBitPtr >>= 1, shiftBits--) {
+			if (shiftBits % 8 < 6) {
+				if ((fromBitPtr & utfcode) != 0) {
+					result |= toBitPtr;
+				}
+				toBitPtr >>= 1;
 			}
-			if ((bitMask2 & utfcode) != 0) {
-				result |= bitMask1;
-			}
-			bitMask1 >>= 1;
 		}
 		
 		return result;

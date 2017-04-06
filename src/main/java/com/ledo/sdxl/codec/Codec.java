@@ -8,18 +8,18 @@ package com.ledo.sdxl.codec;
 public interface Codec {
 
   /**
-   * ½«unicode±àÂë
+   * unicodeçš„utfç¼–ç 
    * 
    * @param unicode
-   * @return
+   * @return -1è¡¨ç¤ºæº¢å‡º
    */
    long encode(long unicode);
 
    /**
-    * ´Ó±àÂë½â³Éunicode
+    * å°†utfç¼–ç è§£ç æˆunicode
     * 
     * @param utfcode
-    * @return
+    * @return -1è¡¨ç¤ºæº¢å‡º
     */
    long decode(long utfcode);
 

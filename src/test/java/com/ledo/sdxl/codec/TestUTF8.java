@@ -1,4 +1,4 @@
-package com.ledo.sdxl.encoder;
+package com.ledo.sdxl.codec;
 
 import org.junit.Test;
 

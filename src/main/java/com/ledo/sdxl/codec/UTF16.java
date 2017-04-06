@@ -1,7 +1,7 @@
 package com.ledo.sdxl.codec;
 
 /**
- * UTF16µÄÊµÏÖ
+ * UTF16çš„å®ç°
  * 
  * @author CaiJiahe
  */
@@ -11,20 +11,20 @@ public class UTF16 implements Codec {
 	public static final long UNICODE_DWORD_END_POS = 0x10FFFFL;
 	
 	/**
-	 * unicodeÎªutf16±àÂë±£Áô0xD800µ½0xDFFF¡£
+	 * unicodeä¸ºutf16ç¼–ç ä¿ç•™0xD800åˆ°0xDFFFã€‚
 	 * 0xD800:1101 10 00 0000 0000
 	 * 0xDC00:1101 11 00 0000 0000
-	 * ÕâÁ½¸öÄ§ÊıµÄºó10Î»ÊÇÊı¾İÎ»£¬×î´óÄÜ±íÊ¾20Î»µÄÊı×Ö¡£
-	 * utf16µÄ¸¨ÖúÆ½Ãæ×î´óµÄ´óĞ¡¾ÍÊÇ20Î»¡£
+	 * è¿™ä¸¤ä¸ªé­”æ•°çš„å10ä½æ˜¯æ•°æ®ä½ï¼Œæœ€å¤§èƒ½è¡¨ç¤º20ä½çš„æ•°å­—ã€‚
+	 * utf16çš„è¾…åŠ©å¹³é¢æœ€å¤§çš„å¤§å°å°±æ˜¯20ä½ã€‚
 	 */
 	public static final long HIGH_BASE = 0xD800L;
 	public static final long LOW_BASE = 0xDC00L;
 
-	public static final long UTFCODE_HIGH_MASK = 0xFFFF0000L; // utfcode¸ß16Î»ÑÚÂë
-	public static final long UTFCODE_LOW_MASK = 0xFFFFL; // utfcodeµÍ16Î»ÑÚÂë
+	public static final long UTFCODE_HIGH_MASK = 0xFFFF0000L; // utfcodeï¿½ï¿½16Î»ï¿½ï¿½ï¿½ï¿½
+	public static final long UTFCODE_LOW_MASK = 0xFFFFL; // utfcodeï¿½ï¿½16Î»ï¿½ï¿½ï¿½ï¿½
 	
-	public static final long UNICODE_HIGH_MASK = 0xFFC00L; // unicode¸ß10Î»ÑÚÂë
-	public static final long UNICODE_LOW_MASK = 0x3FFL; // unicodeµÍ10Î»ÑÚÂë
+	public static final long UNICODE_HIGH_MASK = 0xFFC00L; // unicodeï¿½ï¿½10Î»ï¿½ï¿½ï¿½ï¿½
+	public static final long UNICODE_LOW_MASK = 0x3FFL; // unicodeï¿½ï¿½10Î»ï¿½ï¿½ï¿½ï¿½
 	
 	public long encode(long unicode) {
 		if (unicode < 0 || unicode > UNICODE_DWORD_END_POS) {

@@ -20,11 +20,11 @@ public class UTF16 implements Codec {
 	public static final long HIGH_BASE = 0xD800L;
 	public static final long LOW_BASE = 0xDC00L;
 
-	public static final long UTFCODE_HIGH_MASK = 0xFFFF0000L; // utfcode��16λ����
-	public static final long UTFCODE_LOW_MASK = 0xFFFFL; // utfcode��16λ����
+	public static final long UTFCODE_HIGH_MASK = 0xFFFF0000L; // utfcode高16位掩码
+	public static final long UTFCODE_LOW_MASK = 0xFFFFL; // utfcode低16位掩码
 	
-	public static final long UNICODE_HIGH_MASK = 0xFFC00L; // unicode��10λ����
-	public static final long UNICODE_LOW_MASK = 0x3FFL; // unicode��10λ����
+	public static final long UNICODE_HIGH_MASK = 0xFFC00L; // unicode高10位掩码
+	public static final long UNICODE_LOW_MASK = 0x3FFL; // unicode低10位掩码
 	
 	public long encode(long unicode) {
 		if (unicode < 0 || unicode > UNICODE_DWORD_END_POS) {
